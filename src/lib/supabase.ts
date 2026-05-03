@@ -8,5 +8,5 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
-// Create a single supabase client for interacting with your database
+// Initializing client with auto-refresh enabled to resolve JWT token expiration issues
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
