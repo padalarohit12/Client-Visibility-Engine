@@ -1,90 +1,90 @@
-import { format } from 'date-fns';
-import { Activity, Clock, CheckCircle, Code } from 'lucide-react';
-import { Commit } from '@/types/database.types';
+"use client";
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Activity, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 
-import { supabase } from '@/lib/supabase';
+export default function LandingPage() {
+  const router = useRouter();
+  const [projectId, setProjectId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-export const revalidate = 0; // Disable static rendering for this page to always fetch latest
-
-export default async function DashboardPage() {
-  const { data, error } = await supabase
-    .from('Commits')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching commits:', error);
-  }
-
-  const commits = data || [];
+  const handleAccess = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (projectId.trim()) {
+      setIsLoading(true);
+      router.push(`/dashboard/${encodeURIComponent(projectId.trim())}`);
+    }
+  };
 
   return (
-    <main className="min-h-screen bg-black text-white p-8 md:p-24 selection:bg-accent selection:text-white">
-      <div className="max-w-4xl mx-auto space-y-12">
-        {/* Header */}
-        <header className="space-y-4">
-          <div className="flex items-center gap-3 text-accent mb-2">
-            <Activity className="w-6 h-6" />
-            <span className="font-semibold tracking-widest uppercase text-sm">Live System</span>
+    <main className="min-h-screen bg-black text-white flex flex-col selection:bg-accent selection:text-white">
+      
+      {/* Hero Section */}
+      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-24 relative overflow-hidden">
+        
+        {/* Abstract Background Elements */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent/5 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl -z-10" />
+
+        <div className="max-w-4xl w-full mx-auto text-center space-y-8 z-10">
+          
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm font-medium text-muted mb-4">
+            <Zap className="w-4 h-4 text-accent" />
+            <span>Real-time project transparency</span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-glow">
-            Project Updates
+
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-glow leading-tight">
+            See What We're <br className="hidden md:block" /> Building For You.
           </h1>
-          <p className="text-xl text-muted max-w-2xl">
-            Real-time, plain-English progress tracking for your application. We push code, you see results.
+          
+          <p className="text-xl text-muted max-w-2xl mx-auto leading-relaxed">
+            No more wondering about project status. Enter your unique Project ID below to view a real-time, plain-English timeline of exactly what our engineering team is delivering today.
           </p>
-        </header>
 
-        {/* Timeline */}
-        <div className="relative pt-8">
-          {/* Vertical Line */}
-          <div className="absolute left-6 top-10 bottom-0 w-px bg-slab-border" />
-
-          <div className="space-y-8">
-            {commits.length === 0 ? (
-              <div className="text-center py-12 text-muted border border-dashed border-slab-border rounded-xl">
-                <p>No project updates found yet.</p>
-                <p className="text-sm mt-2">Waiting for the first code push...</p>
-              </div>
-            ) : (
-              commits.map((commit) => (
-                <div key={commit.id} className="relative flex gap-8 group">
-                  {/* Timeline Node */}
-                  <div className="relative z-10 flex-none w-12 h-12 rounded-full glass-panel flex items-center justify-center border border-white/20 group-hover:border-accent group-hover:bg-accent/10 transition-colors">
-                    <CheckCircle className="w-5 h-5 text-muted group-hover:text-accent transition-colors" />
-                  </div>
-
-                  {/* Content Card */}
-                  <div className="flex-1 slab-card group-hover:border-white/20 transition-all">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                      <h3 className="text-xl font-medium text-foreground">
-                        {commit.translated_message || 'System update processed.'}
-                      </h3>
-                      <div className="flex items-center gap-2 text-sm text-muted shrink-0">
-                        <Clock className="w-4 h-4" />
-                        <time dateTime={commit.created_at}>
-                          {format(new Date(commit.created_at), 'MMM d, h:mm a')}
-                        </time>
-                      </div>
-                    </div>
-                    
-                    {/* Technical details accordion (optional/expandable in future, showing raw here for demo) */}
-                    <div className="mt-4 pt-4 border-t border-slab-border/50">
-                      <div className="flex items-center gap-2 text-xs text-muted/70 font-mono">
-                        <Code className="w-3 h-3" />
-                        <span>{commit.hash.substring(0, 7)}</span>
-                        <span>•</span>
-                        <span>{commit.author}</span>
-                      </div>
-                    </div>
-                  </div>
+          {/* Client Access Portal Form */}
+          <div className="pt-12">
+            <form onSubmit={handleAccess} className="max-w-md mx-auto relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-accent to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative flex flex-col sm:flex-row gap-3 p-2 slab-card !p-2 !rounded-xl">
+                <div className="flex-1 flex items-center px-4 bg-black/50 rounded-lg border border-white/10">
+                  <ShieldCheck className="w-5 h-5 text-muted mr-3" />
+                  <input 
+                    type="text" 
+                    value={projectId}
+                    onChange={(e) => setProjectId(e.target.value)}
+                    placeholder="Enter your Project ID..." 
+                    className="w-full bg-transparent border-none py-3 text-white placeholder-muted focus:outline-none focus:ring-0"
+                    required
+                  />
                 </div>
-              ))
-            )}
+                <button 
+                  type="submit"
+                  disabled={isLoading || !projectId.trim()}
+                  className="bg-white text-black px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-accent hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? 'Loading...' : 'View Project'}
+                  {!isLoading && <ArrowRight className="w-4 h-4" />}
+                </button>
+              </div>
+            </form>
+            <p className="text-sm text-muted/50 mt-4">
+              Authorized access only. Contact your project manager if you lost your ID.
+            </p>
           </div>
+
         </div>
       </div>
+      
+      {/* Footer */}
+      <footer className="w-full p-8 border-t border-white/10 text-center">
+        <a 
+          href="/admin" 
+          className="text-xs text-muted/30 hover:text-accent transition-colors font-mono tracking-widest uppercase"
+        >
+          System Admin Access
+        </a>
+      </footer>
     </main>
   );
 }
