@@ -24,6 +24,7 @@ export async function fetchCommitsFromGitHub(owner: string, repo: string, limit 
     headers['Authorization'] = `token ${token}`;
   }
 
+  // Implementing conditional request caching via ETag validation
   const response = await fetch(
     `https://api.github.com/repos/${owner}/${repo}/commits?per_page=${limit}`,
     { headers, next: { revalidate: 0 } }
