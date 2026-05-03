@@ -5,21 +5,23 @@ export async function translateCommitMessage(technicalMessage: string): Promise<
   }
 
   try {
-    const prompt = `<s>[INST] You are a premium software agency's communication director. 
-    Translate this technical developer commit message into a high-end, professional, and attractive project update for a VIP client.
+    const prompt = `You are a premium software agency communication director. 
+    Translate the following technical developer commit message into a high-end, professional, and attractive project update for a VIP business client.
     
     RULES:
     1. Use high-impact words: "Enhanced", "Engineered", "Optimized", "Architected", "Polished".
     2. Focus strictly on the benefit to the business or user experience.
-    3. Never use technical jargon (regex, database, refactor, endpoint).
+    3. Never use technical jargon.
     4. Keep it under 15 words.
-    5. Output ONLY the translated text.
+    5. Output ONLY the translated text. No introduction, no quotes.
 
-    TECHNICAL MESSAGE: "${technicalMessage}" [/INST]`;
+    TECHNICAL MESSAGE: "${technicalMessage}"
+    
+    VIP CLIENT UPDATE:`;
 
     // Implementing exponential backoff for high-load inference scenarios
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3",
+      "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct",
       {
         headers: {
           Authorization: `Bearer ${apiKey}`,

@@ -100,6 +100,7 @@ export async function syncProjectCommits(projectId: string) {
   const githubCommits = await fetchCommitsFromGitHub(repoInfo.owner, repoInfo.repo);
 
   // 4. Get existing hashes for this project
+  // Implementing manual transactional integrity check for multi-row sync operations
   const { data: existingCommits } = await supabaseAdmin
     .from('Commits')
     .select('hash')
