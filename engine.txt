@@ -1,0 +1,48 @@
+Client Transparency System: Full Build Specification
+THE COMPLETE FLOW
+The planned automation flow operates as follows:
+•	You push code to GitHub.
+•	GitHub reads the new commits.
+•	An AI model converts the technical commit messages into client-friendly updates.
+•	The processed data is stored in a database.
+•	From the database, the information flows to three outlets:
+o	A read-only dashboard for the client.
+o	A report generator that creates weekly or monthly summaries.
+o	A history log for record-keeping.
+•	The final updates and reports are delivered to the client via WhatsApp, email, or PDF.
+________________________________________
+PART 1: TECHNICAL BUILD COMPONENTS
+Component 1: GitHub Automation
+•	Function: Watches for new commits and sends commit data to your database.
+•	Implementation Options: GitHub Webhook, GitHub Actions, or a Python Cron job checking every 5 minutes.
+•	Cost: Free (GitHub Actions includes 2000 minutes/month free).
+Component 2: AI Processing
+•	Function: Takes a raw commit message and converts it into a client-friendly update.
+•	Implementation: Send data to the OpenAI API (gpt-3.5-turbo).
+•	Prompt Strategy: Use a prompt that instructs the AI to keep the update short, professional, and easy to understand.
+•	Cost: Approximately ₹50–100/month for 1000 commits.
+Component 3: Database
+•	Function: Stores all commits, AI-converted versions, client preferences, project info, and report history.
+•	Free Options: Google Sheets, Supabase, Firebase, or Airtable.
+Component 4: Client Dashboard (Read-Only)
+•	Function: Provides the client with real-time updates, history, status, and their own report preferences.
+•	Constraints: The client has no edit access; it is view-only.
+•	Free/Low-Cost Options: Notion (free, embeddable), Carrd + Airtable (₹1,500/year), or a custom React build.
+Component 5: Report Generator
+•	Function: Aggregates updates, formats them into a professional report, and sends them via the preferred channel.
+•	Schedule: Weekly (Sunday night) or Monthly (1st of the month).
+•	Delivery Formats: WhatsApp message, email with PDF attachment, or a PDF download link.
+________________________________________
+PART 2: STEP-BY-STEP WORKFLOW
+1.	Push Code: Perform git add, git commit, and git push.
+2.	Detection: GitHub Actions runs automatically to send data to the database.
+3.	AI Processing: The commit message is sent to the AI for translation.
+4.	Data Storage: The original commit, converted message, timestamp, and project name are saved to the database.
+5.	Dashboard Update: The client logs in to view real-time changes.
+6.	Report Generation: On the scheduled date, the system compiles the updates.
+7.	Delivery: The report is sent via the client’s chosen method.
+________________________________________
+PART 3: PRICING FOR CLIENTS
+•	Selling Points: Real-time project updates, read-only dashboard, automated reports, and "done-for-you" management.
+•	Monthly Maintenance: ₹3,000/month (covers AI and operational costs).
+
