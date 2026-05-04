@@ -12,8 +12,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'No commits found in payload' }, { status: 400 });
     }
 
-    const projectId = 'demo-project-id'; // In a real app, infer this from payload.repository.id or name
+    const repoUrl = payload.repository?.html_url || payload.repository?.url;
+    
+    // Look up project ID based on repo URL
+    const { data: project } = await supabaseAdmin
+      .from('Projects')
+      .select('id')
+      .ilike('repository_url', `%${repoUrl}%`)
+      .single();
 
+    if (!project) {
+      return NextResponse.json({ message: 'Unrecognized repository' }, { status: 400 });
+    }
+
+    const projectId = project.id;
     const processedCommits = [];
 
     for (const commit of payload.commits) {
