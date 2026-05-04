@@ -145,7 +145,7 @@ export default async function ProjectDashboardPage({
                 <Activity className="w-6 h-6 animate-pulse" />
                 <div className="absolute inset-0 bg-accent/20 blur-xl rounded-full" />
               </div>
-              <span className="font-bold tracking-[0.3em] uppercase text-xs">Live Work Visibility Engine</span>
+              <span className="font-bold tracking-[0.3em] uppercase text-[10px]">Client Visibility Engine by <span className="text-white italic">Accelry</span></span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-glow leading-tight">
               {project.name}
@@ -171,7 +171,7 @@ export default async function ProjectDashboardPage({
               </div>
               <div className="flex items-center gap-2 text-accent">
                 <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                <span className="text-xs font-bold uppercase tracking-[0.2em]">Message from Rohit (Accely)</span>
+                <span className="text-xs font-bold uppercase tracking-[0.2em]">Message from Rohit (Accelry)</span>
               </div>
               <p className="text-lg font-medium text-white/90 leading-relaxed italic">
                 &quot;{project.agency_note}&quot;
@@ -403,7 +403,7 @@ export default async function ProjectDashboardPage({
         <footer className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
           <div className="space-y-1">
             <p className="text-[10px] font-bold text-muted uppercase tracking-widest">
-              Powered by Accely — Client Work Visibility Engine
+              Powered by Accelry — Client Work Visibility Engine
             </p>
             <p className="text-[10px] text-muted/30">
               Real-time ROI tracking • Proof of Work verification • AI-powered intelligence

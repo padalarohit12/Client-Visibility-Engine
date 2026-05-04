@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Accely — Client Work Visibility Engine",
+  title: "Accelry — Client Visibility Engine",
   description:
     "Real-time project transparency for agencies. Bridge the gap between technical engineering and business value with AI-powered client reports, live dashboards, and proof-of-work tracking.",
   keywords: [

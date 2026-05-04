@@ -22,8 +22,10 @@ import {
   Check,
   RefreshCw,
   X,
-  History as HistoryIcon
+  History as HistoryIcon,
+  Lock
 } from 'lucide-react';
+import { createBrowserClient } from '@supabase/ssr';
 import { 
   getProjects, 
   createProject, 
@@ -208,6 +210,39 @@ export default function AdminPortal() {
 
   return (
     <main className="min-h-screen bg-black text-white flex flex-col relative">
+      {/* Accelry Global Admin Header */}
+      <header className="w-full py-6 px-8 border-b border-white/5 flex justify-between items-center bg-black/50 backdrop-blur-xl z-50">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-accent/10 border border-accent/20 rounded-xl flex items-center justify-center">
+            <ShieldCheck className="w-6 h-6 text-accent" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-black italic tracking-tight uppercase">Accelry</h1>
+            <p className="text-[9px] text-muted uppercase tracking-[0.3em] font-bold">Client Visibility Engine</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-6">
+          <div className="text-right hidden md:block">
+            <p className="text-[10px] text-white font-bold tracking-widest uppercase">Admin Session</p>
+            <p className="text-[9px] text-muted font-medium tracking-wider">teamaccelry@gmail.com</p>
+          </div>
+          <button 
+            onClick={async () => { 
+              const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+              );
+              await supabase.auth.signOut();
+              window.location.href = '/login';
+            }}
+            className="p-2.5 rounded-xl border border-white/10 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-500 transition-all group"
+            title="Secure Logout"
+          >
+            <Lock className="w-5 h-5 opacity-50 group-hover:opacity-100" />
+          </button>
+        </div>
+      </header>
+
       {/* Pulse Modal Overlay */}
       {pulseCommit && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">

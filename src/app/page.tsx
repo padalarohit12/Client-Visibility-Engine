@@ -29,9 +29,9 @@ export default function LandingPage() {
 
         <div className="max-w-4xl w-full mx-auto text-center space-y-8 z-10">
           
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm font-medium text-muted mb-4">
-            <Zap className="w-4 h-4 text-accent" />
-            <span>Real-time project transparency</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold uppercase tracking-[0.2em] text-muted mb-4">
+            <Activity className="w-3.5 h-3.5 text-accent" />
+            <span>Client Visibility Engine by <span className="text-white">Accelry</span></span>
           </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-glow leading-tight">

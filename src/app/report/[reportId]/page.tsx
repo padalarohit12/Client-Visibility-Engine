@@ -38,8 +38,8 @@ export async function generateMetadata({
   }
 
   return {
-    title: report ? `${projectName} — ${report.type} Report | Accely` : 'Report Not Found',
-    description: report?.summary?.substring(0, 160) || 'View this project report powered by Accely Visibility Engine.',
+    title: report ? `${projectName} — ${report.type} Report | Accelry` : 'Report Not Found',
+    description: report?.summary?.substring(0, 160) || 'View this project report powered by Accelry Visibility Engine.',
   };
 }
 
@@ -81,7 +81,7 @@ export default async function PublicReportPage({
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2 text-accent">
             <ShieldCheck className="w-6 h-6 text-accent" />
-            <span className="font-bold tracking-widest uppercase text-xs">Accely Report</span>
+            <span className="font-bold tracking-widest uppercase text-xs">Accelry Report</span>
           </div>
           <span className="px-3 py-1 bg-accent/10 border border-accent/20 text-accent rounded-full text-[10px] font-bold uppercase tracking-widest">
             {report.type} Report
@@ -96,7 +96,7 @@ export default async function PublicReportPage({
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-blue-600">
             <ShieldCheck className="w-8 h-8" />
-            <span className="text-2xl font-black tracking-tighter uppercase italic">ACCELY</span>
+            <span className="text-2xl font-black tracking-tighter uppercase italic">ACCELRY</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-glow">
             {report.Projects?.name}
@@ -183,7 +183,7 @@ export default async function PublicReportPage({
         {/* Footer */}
         <footer className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[10px] font-bold text-muted uppercase tracking-widest">
-            Powered by Accely — Client Work Visibility Engine
+            Powered by Accelry — Client Work Visibility Engine
           </p>
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase italic tracking-tighter text-muted">
             <div className="w-2 h-2 rounded-full bg-accent pulse-dot" /> VERIFIED REPORT

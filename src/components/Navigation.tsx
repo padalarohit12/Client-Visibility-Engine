@@ -13,7 +13,7 @@ export default function Navigation() {
       <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2 text-accent">
           <Activity className="w-6 h-6" />
-          <span className="font-bold tracking-widest uppercase text-xs text-white hidden sm:inline">Visibility Engine</span>
+          <span className="font-bold tracking-widest uppercase text-xs text-white hidden sm:inline">Accelry</span>
         </Link>
         
         <div className="h-6 w-px bg-white/10 hidden sm:block" />
