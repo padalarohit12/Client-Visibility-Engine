@@ -17,13 +17,13 @@ import {
   Zap,
   TrendingUp,
   AlertCircle,
+  ShieldCheck,
   Bell,
   Copy,
   Check,
   RefreshCw,
   X,
-  History as HistoryIcon,
-  Lock
+  History as HistoryIcon
 } from 'lucide-react';
 import { createBrowserClient } from '@supabase/ssr';
 import { 
