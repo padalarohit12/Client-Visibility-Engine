@@ -21,15 +21,15 @@ export default function Navigation() {
         <div className="flex items-center gap-1 bg-white/5 rounded-full p-1 border border-white/10">
           <Link 
             href="/"
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${!isAdmin ? 'bg-white text-black shadow-lg shadow-white/10' : 'text-muted hover:text-white'}`}
+            className={`flex items-center gap-2 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold transition-all ${!isAdmin ? 'bg-white text-black shadow-lg shadow-white/10' : 'text-muted hover:text-white'}`}
           >
-            <Layout className="w-3.5 h-3.5" /> Client Portal
+            <Layout className="w-3.5 h-3.5" /> <span className="hidden xs:inline">Client</span> Portal
           </Link>
           <Link 
             href="/admin"
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${isAdmin ? 'bg-white text-black shadow-lg shadow-white/10' : 'text-muted hover:text-white'}`}
+            className={`flex items-center gap-2 px-3 md:px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold transition-all ${isAdmin ? 'bg-white text-black shadow-lg shadow-white/10' : 'text-muted hover:text-white'}`}
           >
-            <Shield className="w-3.5 h-3.5" /> Admin Portal
+            <Shield className="w-3.5 h-3.5" /> <span className="hidden xs:inline">Admin</span> Portal
           </Link>
         </div>
       </div>

@@ -58,34 +58,34 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-8 bg-black/90 backdrop-blur-sm overflow-y-auto no-scrollbar print-root-container">
       <div className="bg-white text-black w-full max-w-4xl rounded-none md:rounded-2xl shadow-2xl relative flex flex-col my-0 md:my-8 min-h-screen md:min-h-0 print:shadow-none print:m-0 print:w-full print:max-w-none print-report-content">
         
-        {/* Header / Actions - HIDDEN DURING PRINT */}
-        <div className="flex justify-between items-center p-6 border-b border-slate-100 sticky top-0 bg-white/80 backdrop-blur-md z-50 rounded-t-2xl no-print">
-          <div className="flex items-center gap-4">
-            <h2 className="text-xl font-bold tracking-tight text-slate-900">Executive Strategy Preview</h2>
-            <span className="px-3 py-1 bg-slate-100 border border-slate-200 text-slate-600 rounded-full text-[10px] font-bold uppercase tracking-widest">
+        {/* Header / Actions - FIXED POSITION OUTSIDE SCROLL */}
+        <div className="flex justify-between items-center p-4 md:p-6 border-b border-slate-100 bg-white/95 backdrop-blur-md z-[60] rounded-t-2xl no-print shrink-0">
+          <div className="flex items-center gap-3">
+            <h2 className="text-sm md:text-xl font-bold tracking-tight text-slate-900">Executive Strategy</h2>
+            <span className="hidden md:block px-3 py-1 bg-slate-100 border border-slate-200 text-slate-600 rounded-full text-[10px] font-bold uppercase tracking-widest">
               {report.type} Report
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             <button 
               onClick={handleCopyLink}
               className="p-2 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all text-slate-600"
-              title="Copy shareable link"
+              title="Copy link"
             >
               {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
             </button>
             <button 
               onClick={() => handleSend('email')}
-              className="p-2 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all text-slate-600"
+              className="hidden md:block p-2 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all text-slate-600"
               title="Email PDF"
             >
               <Mail className="w-4 h-4" />
             </button>
             <button 
               onClick={() => window.print()}
-              className="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-all shadow-lg shadow-black/10"
+              className="flex items-center gap-2 bg-black text-white px-3 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-800 transition-all shadow-lg"
             >
-              <Download className="w-4 h-4" /> Export Strategic PDF
+              <Download className="w-4 h-4" /> <span className="hidden sm:inline">Export Strategic PDF</span><span className="sm:hidden">Export</span>
             </button>
             <button 
               onClick={onClose}
@@ -96,8 +96,8 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
           </div>
         </div>
 
-        {/* PRINTABLE REPORT CONTENT - Added pt-32 for header clearance in preview */}
-        <div className="flex-1 p-12 md:p-24 pt-32 md:pt-32 space-y-16 relative overflow-hidden bg-white">
+        {/* PRINTABLE REPORT CONTENT - INDEPENDENT SCROLL */}
+        <div className="flex-1 overflow-y-auto p-6 md:p-24 space-y-16 relative bg-white no-scrollbar scroll-smooth">
           
           {/* Subtle Watermark for PDF only */}
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg] overflow-hidden">

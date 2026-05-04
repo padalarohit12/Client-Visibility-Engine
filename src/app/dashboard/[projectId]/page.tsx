@@ -145,52 +145,51 @@ export default async function ProjectDashboardPage({
         )}
 
         {/* SaaS Header / Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-          <header className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 items-start">
+          <header className="lg:col-span-2 space-y-4 md:space-y-6">
             <div className="flex items-center gap-3 text-accent mb-2">
-              <div className="relative">
-                <Activity className="w-6 h-6 animate-pulse" />
+              <div className="relative shrink-0">
+                <Activity className="w-5 h-5 md:w-6 md:h-6 animate-pulse" />
                 <div className="absolute inset-0 bg-accent/20 blur-xl rounded-full" />
               </div>
-              <span className="font-bold tracking-[0.3em] uppercase text-[10px]">Client Visibility Engine by <span className="text-white italic">Accelry</span></span>
+              <span className="font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-[8px] md:text-[10px]">Client Visibility Engine by <span className="text-white italic">Accelry</span></span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-glow leading-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold tracking-tight text-glow leading-tight break-words">
               {project.name}
             </h1>
-            <p className="text-xl text-muted max-w-2xl leading-relaxed">
+            <p className="text-base md:text-xl text-muted max-w-2xl leading-relaxed">
               Real-time, high-fidelity progress tracking. We bridge the gap between technical engineering and business value.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-4">
-              <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-full flex items-center gap-2">
-                <StatusIcon className="w-3.5 h-3.5" />
-                <span className={`w-2 h-2 rounded-full ${currentStatus.color} ${currentStatus.glow}`} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">{currentStatus.label}</span>
+            <div className="flex flex-wrap gap-3 pt-2 md:pt-4">
+              <div className="px-3 md:px-4 py-1.5 md:py-2 bg-white/5 border border-white/10 rounded-full flex items-center gap-2">
+                <StatusIcon className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                <span className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full ${currentStatus.color} ${currentStatus.glow}`} />
+                <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-widest">{currentStatus.label}</span>
               </div>
-
             </div>
           </header>
           {/* Executive Word from Agency */}
           {project.agency_note && (
-            <div className="slab-card space-y-4 border-accent/40 bg-accent/10 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Users className="w-12 h-12 text-accent" />
+            <div className="slab-card space-y-4 border-accent/40 bg-accent/10 relative overflow-hidden group p-6">
+              <div className="absolute top-0 right-0 p-4 opacity-5 md:opacity-10 group-hover:opacity-20 transition-opacity">
+                <Users className="w-8 h-8 md:w-12 md:h-12 text-accent" />
               </div>
               <div className="flex items-center gap-2 text-accent">
-                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                <span className="text-xs font-bold uppercase tracking-[0.2em]">Message from Rohit (Accelry)</span>
+                <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-accent animate-pulse" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Note from Rohit (Accelry)</span>
               </div>
-              <p className="text-lg font-medium text-white/90 leading-relaxed italic">
+              <p className="text-base md:text-lg font-medium text-white/90 leading-relaxed italic">
                 &quot;{project.agency_note}&quot;
               </p>
             </div>
           )}
 
           {project.impact_summary && (
-            <div className="slab-card space-y-4 bg-white/5 border-white/10">
+            <div className="slab-card space-y-3 md:space-y-4 bg-white/5 border-white/10 p-6">
               <div className="flex items-center gap-2 text-accent/70">
                 <Zap className="w-4 h-4" />
-                <span className="text-xs font-bold uppercase tracking-widest">Strategic Outcome Summary</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest">Strategic Outcome Summary</span>
               </div>
               <p className="text-sm text-muted italic leading-relaxed">
                 &quot;{project.impact_summary}&quot;
@@ -200,26 +199,26 @@ export default async function ProjectDashboardPage({
         </div>
 
         {/* ROI & Stats Dashboard */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors">
-            <BarChart3 className="w-6 h-6 text-accent mx-auto" />
-            <p className="text-3xl font-bold">{commits.length}</p>
-            <p className="text-[10px] text-muted font-bold uppercase tracking-widest">Total Updates</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors py-6">
+            <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-accent mx-auto" />
+            <p className="text-2xl md:text-3xl font-bold">{commits.length}</p>
+            <p className="text-[9px] md:text-[10px] text-muted font-bold uppercase tracking-widest">Total Updates</p>
           </div>
-          <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors">
-            <TrendingUp className="w-6 h-6 text-green-500 mx-auto" />
-            <p className="text-3xl font-bold">{weeklyCommits.length}</p>
-            <p className="text-[10px] text-muted font-bold uppercase tracking-widest">This Week</p>
+          <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors py-6">
+            <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-green-500 mx-auto" />
+            <p className="text-2xl md:text-3xl font-bold">{weeklyCommits.length}</p>
+            <p className="text-[9px] md:text-[10px] text-muted font-bold uppercase tracking-widest">This Week</p>
           </div>
-          <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors">
-            <Target className="w-6 h-6 text-purple-500 mx-auto" />
-            <p className="text-3xl font-bold">{uniqueAuthors}</p>
-            <p className="text-[10px] text-muted font-bold uppercase tracking-widest">Contributors</p>
+          <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors py-6">
+            <Target className="w-5 h-5 md:w-6 md:h-6 text-purple-500 mx-auto" />
+            <p className="text-2xl md:text-3xl font-bold">{uniqueAuthors}</p>
+            <p className="text-[9px] md:text-[10px] text-muted font-bold uppercase tracking-widest">Contributors</p>
           </div>
-          <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors">
-            <ShieldCheck className="w-6 h-6 text-blue-500 mx-auto" />
-            <p className="text-3xl font-bold">{totalPublishedReports || 0}</p>
-            <p className="text-[10px] text-muted font-bold uppercase tracking-widest">Reports Generated</p>
+          <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors py-6">
+            <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 text-blue-500 mx-auto" />
+            <p className="text-2xl md:text-3xl font-bold">{totalPublishedReports || 0}</p>
+            <p className="text-[9px] md:text-[10px] text-muted font-bold uppercase tracking-widest">Reports Generated</p>
           </div>
         </div>
 

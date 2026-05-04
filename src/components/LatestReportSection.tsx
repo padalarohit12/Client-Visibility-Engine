@@ -19,35 +19,35 @@ export function LatestReportSection({ reports }: { reports: any[] }) {
       <section className="space-y-12 animate-fade-in">
         {/* Spotlight: Latest Report */}
         <div className="space-y-6">
-          <div className="flex justify-between items-end">
-            <h2 className="text-2xl font-bold flex items-center gap-3">
-              <FileText className="w-6 h-6 text-accent" />
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+            <h2 className="text-xl md:text-2xl font-bold flex items-center gap-3">
+              <FileText className="w-5 h-5 md:w-6 md:h-6 text-accent" />
               Latest Executive Strategy
             </h2>
             <div className="flex items-center gap-2">
               <span className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest ${latest.type === 'weekly' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/20' : 'bg-purple-500/20 text-purple-400 border border-purple-500/20'}`}>
                 {latest.type}
               </span>
-              <p className="text-[10px] text-muted font-bold uppercase tracking-widest mb-1">
+              <p className="text-[10px] text-muted font-bold uppercase tracking-widest">
                 Delivered {format(new Date(latest.created_at), 'MMMM do, yyyy')}
               </p>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Summary Block */}
-            <div className="md:col-span-2 slab-card bg-white/5 border-white/10 space-y-4">
+            <div className="lg:col-span-2 slab-card bg-white/5 border-white/10 space-y-4 p-6">
               <div className="flex items-center gap-2 text-accent/50">
                 <Activity className="w-4 h-4" />
                 <span className="text-[10px] font-bold uppercase tracking-widest">Executive Summary</span>
               </div>
-              <p className="text-lg font-medium leading-relaxed text-white/90">
+              <p className="text-base md:text-lg font-medium leading-relaxed text-white/90">
                 {latest.summary}
               </p>
             </div>
 
             {/* Optimization Opportunities */}
-            <div className="slab-card bg-accent/5 border-accent/20 space-y-4 flex flex-col justify-between">
+            <div className="slab-card bg-accent/5 border-accent/20 space-y-6 flex flex-col justify-between p-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-accent">
                   <Zap className="w-4 h-4" />
@@ -64,9 +64,9 @@ export function LatestReportSection({ reports }: { reports: any[] }) {
               </div>
               <button 
                 onClick={() => setSelectedReport(latest)}
-                className="w-full py-3 bg-white/5 border border-white/10 rounded-lg text-center text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-all text-white flex items-center justify-center gap-2"
+                className="w-full py-4 bg-white/5 border border-white/10 rounded-xl text-center text-[10px] font-bold uppercase tracking-widest hover:bg-accent hover:text-white hover:border-accent transition-all text-white flex items-center justify-center gap-2 group"
               >
-                <Download className="w-3 h-3" /> View & Download Full Report
+                <Download className="w-4 h-4 group-hover:scale-110 transition-transform" /> View & Download Full Report
               </button>
             </div>
           </div>
