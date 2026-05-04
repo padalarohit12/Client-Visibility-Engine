@@ -62,11 +62,11 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
     
-    // Explicit Admin Email Check
-    const adminEmails = ['teamaccelry@gmail.com', 'admin@accelry.com']
-    if (!adminEmails.includes(session.user.email || '')) {
-      // Redirect unauthorized users to a public area
-      return NextResponse.redirect(new URL('/', request.url))
+    // ULTRA-STRICT ADMIN LOCK
+    const authorizedEmail = 'teamaccelry@gmail.com'
+    if (session.user.email !== authorizedEmail) {
+      // Redirect unauthorized users to login with an error
+      return NextResponse.redirect(new URL('/login?error=restricted', request.url))
     }
   }
 

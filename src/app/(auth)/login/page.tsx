@@ -23,17 +23,29 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      // 1. Strict Email Check BEFORE attempting auth
+      if (email.toLowerCase() !== 'teamaccelry@gmail.com') {
+        throw new Error('Unauthorized Access Attempt');
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
+      
       if (error) throw error;
       
+      if (data?.user?.email !== 'teamaccelry@gmail.com') {
+        await supabase.auth.signOut();
+        throw new Error('Access Restricted');
+      }
+      
       toast.success('Admin Identity Verified');
-      router.push('/admin');
+      
+      // Hard redirect to ensure middleware sees the new session immediately
+      window.location.href = '/admin';
     } catch (error: any) {
       toast.error(error.message || 'Access Denied');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -76,7 +88,7 @@ export default function LoginPage() {
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="teamaccelry@gmail.com"
+                placeholder="Enter email..."
                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                 required
               />
@@ -90,7 +102,7 @@ export default function LoginPage() {
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="Enter password..."
                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                 required
               />
