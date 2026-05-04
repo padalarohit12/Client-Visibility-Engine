@@ -55,8 +55,8 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
   const commitDetails = report.metrics?.commit_details || [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-8 bg-black/90 backdrop-blur-sm overflow-y-auto no-scrollbar">
-      <div className="bg-white text-black w-full max-w-4xl rounded-none md:rounded-2xl shadow-2xl relative flex flex-col my-0 md:my-8 min-h-screen md:min-h-0 print:shadow-none print:m-0 print:w-full print:max-w-none print-report-container">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-8 bg-black/90 backdrop-blur-sm overflow-y-auto no-scrollbar print-root-container">
+      <div className="bg-white text-black w-full max-w-4xl rounded-none md:rounded-2xl shadow-2xl relative flex flex-col my-0 md:my-8 min-h-screen md:min-h-0 print:shadow-none print:m-0 print:w-full print:max-w-none print-report-content">
         
         {/* Header / Actions - HIDDEN DURING PRINT */}
         <div className="flex justify-between items-center p-6 border-b border-slate-100 sticky top-0 bg-white/80 backdrop-blur-md z-50 rounded-t-2xl no-print">
@@ -97,7 +97,7 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
         </div>
 
         {/* PRINTABLE REPORT CONTENT */}
-        <div className="flex-1 p-12 md:p-24 space-y-16 relative overflow-hidden bg-white print:p-12">
+        <div className="flex-1 p-12 md:p-24 space-y-16 relative overflow-hidden bg-white">
           
           {/* Subtle Watermark for PDF only */}
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg] overflow-hidden">
@@ -189,7 +189,7 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
             <div className="divide-y divide-slate-100">
               {commitDetails.length > 0 ? (
                 commitDetails.map((c: any, i: number) => (
-                  <div key={i} className="py-6 flex justify-between items-start group">
+                  <div key={i} className="py-6 flex justify-between items-start group print-log-item">
                     <div className="space-y-2 flex-1 pr-12">
                       <p className="text-lg font-bold leading-tight group-hover:text-accent transition-colors">{c.message}</p>
                       <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
@@ -227,45 +227,61 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
 
       <style jsx global>{`
         @media print {
-          /* Hide everything by default */
-          body * {
-            visibility: hidden;
-            overflow: visible !important;
-          }
-          
-          /* Show ONLY the report content and its parents */
-          .print-report-container,
-          .print-report-container * {
-            visibility: visible !important;
+          /* 1. Nuke everything in the DOM from the print view */
+          body > *:not(.print-root-container) {
+            display: none !important;
           }
 
-          /* Force the report to the top of the print page */
-          .print-report-container {
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
+          /* 2. Reset Body for printing */
+          body, html {
+            background: white !important;
+            color: black !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            overflow: visible !important;
+          }
+
+          /* 3. Force the Report to be the ONLY thing existing */
+          .print-root-container {
+            display: block !important;
+            position: static !important;
             width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
+            visibility: visible !important;
           }
 
+          /* 4. Selectively show report children */
+          .print-report-content {
+            display: block !important;
+            visibility: visible !important;
+            padding: 2cm !important; /* Professional margin */
+          }
+
+          /* 5. Hide the Modal Actions (Download/X buttons) */
           .no-print {
             display: none !important;
           }
 
+          /* 6. Fix Page 2 Overlap - The "Absolute" killer */
           .print-page-break {
-            page-break-before: always;
-            height: 0;
-            margin: 0;
-            border: none;
+            display: block;
+            page-break-after: always;
+            break-after: page;
           }
 
-          /* Ensure high-quality typography */
-          p, h1, h2, h3, h4 {
-            orphans: 3;
-            widows: 3;
+          /* 7. Ensure logs don't split mid-sentence */
+          .print-log-item {
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          /* 8. Modernist Typography Overrides for Print */
+          h1, h2, h3, h4, p, span {
+            color: black !important;
+            text-shadow: none !important;
           }
         }
         

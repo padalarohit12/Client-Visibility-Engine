@@ -41,6 +41,7 @@ import {
   getPulses
 } from './actions';
 import { ReportPreview } from '@/components/ReportPreview';
+import { Portal } from '@/components/Portal';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
@@ -694,13 +695,15 @@ export default function AdminPortal() {
       </div>
 
       {selectedReport && (
-        <ReportPreview 
-          report={selectedReport} 
-          onClose={() => {
-            setSelectedReport(null);
-            loadData();
-          }} 
-        />
+        <Portal>
+          <ReportPreview 
+            report={selectedReport} 
+            onClose={() => {
+              setSelectedReport(null);
+              loadData();
+            }} 
+          />
+        </Portal>
       )}
     </main>
   );

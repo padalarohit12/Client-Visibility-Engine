@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { FileText, Activity, Zap, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { ReportPreview } from '@/components/ReportPreview';
+import { Portal } from '@/components/Portal';
 
 export function LatestReportSection({ reports }: { reports: any[] }) {
   const [selectedReport, setSelectedReport] = useState<any>(null);
@@ -107,10 +108,12 @@ export function LatestReportSection({ reports }: { reports: any[] }) {
       </section>
 
       {selectedReport && (
-        <ReportPreview 
-          report={selectedReport} 
-          onClose={() => setSelectedReport(null)} 
-        />
+        <Portal>
+          <ReportPreview 
+            report={selectedReport} 
+            onClose={() => setSelectedReport(null)} 
+          />
+        </Portal>
       )}
     </>
   );
