@@ -1,3 +1,4 @@
+<!-- Test Commit: Visibility Engine Sync Verification -->
 <div align="center">
   <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/activity.svg" width="60" alt="Activity Icon" />
   <h1 align="center">Client Visibility Engine</h1>
