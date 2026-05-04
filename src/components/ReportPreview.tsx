@@ -189,7 +189,7 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
 
             <div className="space-y-3">
               {commitDetails.length > 0 ? (
-                commitDetails.slice(0, 8).map((c: any, i: number) => (
+                commitDetails.map((c: any, i: number) => (
                   <div key={i} className="p-4 border border-slate-200 rounded-lg flex justify-between items-center bg-slate-50/50 hover:bg-slate-50 transition-colors">
                     <div className="space-y-1 flex-1">
                       <p className="text-sm font-medium text-slate-900">{c.message}</p>
@@ -208,11 +208,7 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
                 </div>
               )}
 
-              {commitDetails.length > 8 && (
-                <p className="text-xs text-slate-400 text-center italic">
-                  + {commitDetails.length - 8} more updates. View full details in your live dashboard.
-                </p>
-              )}
+
             </div>
           </section>
 

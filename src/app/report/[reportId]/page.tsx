@@ -163,7 +163,7 @@ export default async function PublicReportPage({
               </span>
             </div>
             <div className="space-y-3">
-              {commitDetails.slice(0, 10).map((c: any, i: number) => (
+              {commitDetails.map((c: any, i: number) => (
                 <div key={i} className="slab-card py-4 flex justify-between items-center hover:border-white/20 transition-colors">
                   <div className="space-y-1">
                     <p className="text-sm font-medium">{c.message}</p>
