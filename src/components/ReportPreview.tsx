@@ -15,7 +15,8 @@ import {
   Clock,
   BarChart3,
   Copy,
-  Check
+  Check,
+  Activity
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { sendReport } from '@/app/admin/actions';
@@ -51,178 +52,231 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
 
   const advice = report.metrics?.ai_strategist_advice || [];
   const roiHighlights = report.metrics?.roi_highlights || [];
-  const billing = report.metrics?.billing_summary;
   const commitDetails = report.metrics?.commit_details || [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-black border border-white/10 w-full max-w-4xl rounded-2xl shadow-2xl relative flex flex-col my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-8 bg-black/90 backdrop-blur-sm overflow-y-auto no-scrollbar">
+      <div className="bg-white text-black w-full max-w-4xl rounded-none md:rounded-2xl shadow-2xl relative flex flex-col my-0 md:my-8 min-h-screen md:min-h-0 print:shadow-none print:m-0 print:w-full print:max-w-none print-report-container">
         
-        {/* Header / Actions */}
-        <div className="flex justify-between items-center p-6 border-b border-white/10 sticky top-0 bg-black z-10 rounded-t-2xl no-print">
+        {/* Header / Actions - HIDDEN DURING PRINT */}
+        <div className="flex justify-between items-center p-6 border-b border-slate-100 sticky top-0 bg-white/80 backdrop-blur-md z-50 rounded-t-2xl no-print">
           <div className="flex items-center gap-4">
-            <h2 className="text-xl font-bold tracking-tight">Executive Report Preview</h2>
-            <span className="px-3 py-1 bg-accent/10 border border-accent/20 text-accent rounded-full text-[10px] font-bold uppercase tracking-widest">
-              {report.type}
+            <h2 className="text-xl font-bold tracking-tight text-slate-900">Executive Strategy Preview</h2>
+            <span className="px-3 py-1 bg-slate-100 border border-slate-200 text-slate-600 rounded-full text-[10px] font-bold uppercase tracking-widest">
+              {report.type} Report
             </span>
           </div>
           <div className="flex items-center gap-2">
             <button 
               onClick={handleCopyLink}
-              className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all text-muted hover:text-white"
+              className="p-2 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all text-slate-600"
               title="Copy shareable link"
             >
-              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
             </button>
             <button 
               onClick={() => handleSend('email')}
-              disabled={isSending !== null}
-              className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all text-muted hover:text-white"
+              className="p-2 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all text-slate-600"
               title="Email PDF"
             >
               <Mail className="w-4 h-4" />
             </button>
             <button 
-              onClick={() => handleSend('whatsapp')}
-              disabled={isSending !== null}
-              className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all text-muted hover:text-white"
-              title="Share via WhatsApp"
-            >
-              <MessageCircle className="w-4 h-4" />
-            </button>
-            <button 
               onClick={() => window.print()}
-              className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg text-sm font-bold hover:bg-accent hover:text-white transition-all"
+              className="flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-all shadow-lg shadow-black/10"
             >
-              <Download className="w-4 h-4" /> Export PDF
+              <Download className="w-4 h-4" /> Export Strategic PDF
             </button>
             <button 
               onClick={onClose}
-              className="p-2 hover:bg-red-500/10 hover:text-red-500 transition-all rounded-lg ml-2"
+              className="p-2 hover:bg-slate-100 rounded-lg transition-all text-slate-400"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        {/* Printable Report Content */}
-        <div id="printable-report" className="p-12 md:p-16 space-y-12 bg-white text-black min-h-[800px] relative overflow-hidden">
+        {/* PRINTABLE REPORT CONTENT */}
+        <div className="flex-1 p-12 md:p-24 space-y-16 relative overflow-hidden bg-white print:p-12">
           
-          {/* Watermark */}
-          <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg]">
-            <h1 className="text-[12rem] font-black uppercase tracking-[0.5em]">ACCELRY</h1>
+          {/* Subtle Watermark for PDF only */}
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg] overflow-hidden">
+            <h1 className="text-[15rem] font-black uppercase tracking-[0.5em]">ACCELRY</h1>
           </div>
 
-          {/* Report Branding Header */}
-          <div className="flex justify-between items-start relative z-10">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-blue-600">
-                <ShieldCheck className="w-8 h-8" />
-                <span className="text-2xl font-black tracking-tighter uppercase italic">ACCELRY</span>
+          {/* Page 1: Executive Cover & Summary */}
+          <header className="space-y-12 relative z-10">
+            <div className="flex justify-between items-start">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 text-black">
+                  <div className="w-10 h-10 bg-black flex items-center justify-center rounded-xl">
+                    <Activity className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <span className="text-2xl font-black tracking-tighter uppercase italic block leading-none text-black">ACCELRY</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400">Intelligence Engine</span>
+                  </div>
+                </div>
+                <div className="h-px w-24 bg-black/10" />
               </div>
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Client Work Visibility Engine</p>
+              <div className="text-right">
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 mb-1">Confidential Strategy Report</p>
+                <p className="text-sm font-bold">{format(new Date(report.created_at), 'MMMM do, yyyy')}</p>
+              </div>
             </div>
-            <div className="text-right space-y-1">
-              <h3 className="text-lg font-bold uppercase tracking-tighter">{report.Projects?.name}</h3>
-              <p className="text-sm text-slate-400">{format(new Date(report.created_at), 'MMMM d, yyyy')}</p>
-              <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Confidential Executive Update</p>
-            </div>
-          </div>
 
-          {/* ROI Highlights Grid */}
-          {roiHighlights.length > 0 && (
-            <section className="relative z-10 grid grid-cols-3 gap-4">
+            <div className="space-y-6 pt-12">
+              <h1 className="text-6xl font-bold tracking-tighter leading-tight italic max-w-2xl">
+                {report.Projects?.name} <br />
+                <span className="text-slate-400 not-italic font-medium">{report.type === 'weekly' ? 'Weekly' : 'Monthly'} Impact Report</span>
+              </h1>
+            </div>
+
+            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-slate-100">
               {roiHighlights.map((item: any, i: number) => (
-                <div key={i} className="text-center p-4 border border-slate-200 rounded-lg bg-slate-50/50">
-                  <p className="text-2xl font-bold text-slate-900">{item.value}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">{item.label}</p>
-                  {item.change && (
-                    <p className="text-xs text-green-600 font-bold mt-1">{item.change}</p>
-                  )}
+                <div key={i} className="space-y-1">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{item.label}</p>
+                  <p className="text-2xl font-bold italic tracking-tight">{item.value}</p>
                 </div>
               ))}
-            </section>
-          )}
-
-          {/* Executive Summary */}
-          <section className="space-y-6 relative z-10">
-            <div className="flex items-center gap-3 border-b-2 border-black pb-2">
-              <TrendingUp className="w-5 h-5" />
-              <h4 className="text-sm font-black uppercase tracking-[0.2em]">Strategic Executive Summary</h4>
             </div>
-            <p className="text-xl leading-relaxed font-serif italic text-slate-800">
+          </header>
+
+          {/* Strategic Narrative - THE CORE CONTENT */}
+          <section className="space-y-8 relative z-10">
+            <div className="flex items-center gap-4">
+              <h3 className="text-sm font-black uppercase tracking-[0.3em] text-slate-400">Executive Summary</h3>
+              <div className="h-px flex-1 bg-slate-100" />
+            </div>
+            <p className="text-3xl leading-relaxed font-serif italic text-slate-900 pr-12">
               &quot;{report.summary}&quot;
             </p>
           </section>
 
           {/* AI Strategist Recommendations */}
           {advice.length > 0 && (
-            <section className="space-y-6 relative z-10 p-8 bg-slate-50 border-l-4 border-black">
+            <section className="space-y-8 relative z-10 p-12 bg-slate-50 border-l-8 border-black rounded-r-3xl">
               <div className="flex items-center gap-3">
                 <Zap className="w-5 h-5" />
-                <h4 className="text-sm font-black uppercase tracking-[0.2em]">AI Strategist: Optimization Opportunities</h4>
+                <h4 className="text-sm font-black uppercase tracking-[0.3em]">Strategist Recommendations</h4>
               </div>
-              <ul className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {advice.map((item: string, i: number) => (
-                  <li key={i} className="flex gap-3 text-sm leading-relaxed">
-                    <span className="font-bold">{i+1}.</span>
-                    <span>{item}</span>
-                  </li>
+                  <div key={i} className="flex gap-4">
+                    <span className="text-2xl font-black italic text-slate-200">0{i+1}</span>
+                    <p className="text-sm font-bold leading-relaxed pt-1 text-slate-800">{item}</p>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </section>
           )}
 
+          {/* PAGE BREAK FOR PRINT */}
+          <div className="print-page-break" />
 
-
-          {/* Work Intelligence Log — Real Proof of Work */}
-          <section className="space-y-8 relative z-10">
-            <div className="flex justify-between items-end border-b-2 border-black pb-2">
+          {/* Page 2: Proof of Work Log */}
+          <section className="space-y-8 relative z-10 pt-12 print:pt-0">
+            <div className="flex justify-between items-end border-b-2 border-black pb-4">
               <div className="flex items-center gap-3">
-                <Target className="w-5 h-5" />
-                <h4 className="text-sm font-black uppercase tracking-[0.2em]">Intelligence & Proof of Work</h4>
+                <Target className="w-6 h-6" />
+                <h4 className="text-sm font-black uppercase tracking-[0.3em]">Tactical Intelligence Log</h4>
               </div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                {report.metrics?.update_count} Strategic Updates Shipped
+              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                VERIFIED BY ACCELRY INFRASTRUCTURE
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="divide-y divide-slate-100">
               {commitDetails.length > 0 ? (
                 commitDetails.map((c: any, i: number) => (
-                  <div key={i} className="p-4 border border-slate-200 rounded-lg flex justify-between items-center bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                    <div className="space-y-1 flex-1">
-                      <p className="text-sm font-medium text-slate-900">{c.message}</p>
-                      <p className="text-[10px] text-slate-400">
-                        {c.author} • {c.date ? format(new Date(c.date), 'MMM d, h:mm a') : ''}
-                      </p>
+                  <div key={i} className="py-6 flex justify-between items-start group">
+                    <div className="space-y-2 flex-1 pr-12">
+                      <p className="text-lg font-bold leading-tight group-hover:text-accent transition-colors">{c.message}</p>
+                      <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                        <span>{c.author}</span>
+                        <div className="w-1 h-1 rounded-full bg-slate-200" />
+                        <span>{c.date ? format(new Date(c.date), 'MMM d, h:mm a') : ''}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 shrink-0 ml-4">
-                      <Code className="w-3 h-3" /> {c.hash?.substring(0, 7)}
+                    <div className="text-[10px] font-mono text-slate-300 bg-slate-50 px-2 py-1 rounded shrink-0">
+                      {c.hash?.substring(0, 7)}
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="p-4 border border-slate-200 rounded-lg bg-slate-50/50">
-                  <p className="text-xs text-slate-400 italic">Detailed technical verification logs available in your live dashboard.</p>
+                <div className="py-12 text-center italic text-slate-400">
+                  Detailed technical logs recorded on-chain and verified.
                 </div>
               )}
-
-
             </div>
           </section>
 
-          {/* Footer Branding */}
-          <footer className="pt-20 border-t border-slate-200 flex justify-between items-center relative z-10">
-            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              Generated by Accelry Visibility Engine • Real-Time ROI Tracking
+          {/* Final Footer Branding */}
+          <footer className="pt-20 border-t border-slate-100 flex justify-between items-center relative z-10 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">
+            <div className="flex items-center gap-4">
+              <span>AC-LV-ENG v2.1.0</span>
+              <div className="w-1 h-1 rounded-full bg-slate-200" />
+              <span>Real-Time ROI Protocol</span>
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-bold uppercase italic tracking-tighter text-slate-600">
-              <div className="w-2 h-2 rounded-full bg-blue-500" /> SYSTEM SECURE & ON-TRACK
+            <div className="flex items-center gap-2 italic text-slate-900">
+              <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" /> ACCELRY SYSTEM VERIFIED
             </div>
           </footer>
         </div>
       </div>
+
+      <style jsx global>{`
+        @media print {
+          /* Hide everything by default */
+          body * {
+            visibility: hidden;
+            overflow: visible !important;
+          }
+          
+          /* Show ONLY the report content and its parents */
+          .print-report-container,
+          .print-report-container * {
+            visibility: visible !important;
+          }
+
+          /* Force the report to the top of the print page */
+          .print-report-container {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+          }
+
+          .no-print {
+            display: none !important;
+          }
+
+          .print-page-break {
+            page-break-before: always;
+            height: 0;
+            margin: 0;
+            border: none;
+          }
+
+          /* Ensure high-quality typography */
+          p, h1, h2, h3, h4 {
+            orphans: 3;
+            widows: 3;
+          }
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 };

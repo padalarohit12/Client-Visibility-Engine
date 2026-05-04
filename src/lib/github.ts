@@ -13,7 +13,7 @@ export function parseGitHubUrl(url: string) {
   }
 }
 
-export async function fetchCommitsFromGitHub(owner: string, repo: string, limit = 10) {
+export async function fetchCommitsFromGitHub(owner: string, repo: string, limit = 100) {
   const token = process.env.GITHUB_PAT; // Optional token for private repos/higher rate limits
   
   const headers: HeadersInit = {

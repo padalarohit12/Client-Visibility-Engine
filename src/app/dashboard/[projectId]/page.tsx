@@ -46,23 +46,30 @@ export default async function ProjectDashboardPage({
   }
 
 
-  // 2. Fetch commits
+  // 2. Fetch commits - Increased limit to ensure full history
   const { data: commitsData } = await supabaseAdmin
     .from('Commits')
     .select('*')
     .eq('project_id', project.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .limit(500); // Massive fetch depth for transparency
 
   const commits = commitsData || [];
 
-  // 3. Fetch latest reports
+  // 3. Fetch latest reports AND total count
   const { data: reportsData } = await supabaseAdmin
     .from('Reports')
     .select('*')
     .eq('project_id', project.id)
     .eq('is_published', true)
     .order('created_at', { ascending: false })
-    .limit(3);
+    .limit(10); // Show more in the archive
+
+  const { count: totalPublishedReports } = await supabaseAdmin
+    .from('Reports')
+    .select('*', { count: 'exact', head: true })
+    .eq('project_id', project.id)
+    .eq('is_published', true);
 
   const reports = reportsData || [];
 
@@ -211,7 +218,7 @@ export default async function ProjectDashboardPage({
           </div>
           <div className="slab-card text-center space-y-2 hover:border-accent/30 transition-colors">
             <ShieldCheck className="w-6 h-6 text-blue-500 mx-auto" />
-            <p className="text-3xl font-bold">{reports.length}</p>
+            <p className="text-3xl font-bold">{totalPublishedReports || 0}</p>
             <p className="text-[10px] text-muted font-bold uppercase tracking-widest">Reports Generated</p>
           </div>
         </div>
