@@ -96,16 +96,17 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
           </div>
         </div>
 
-        {/* PRINTABLE REPORT CONTENT */}
-        <div className="flex-1 p-12 md:p-24 space-y-16 relative overflow-hidden bg-white">
+        {/* PRINTABLE REPORT CONTENT - Added pt-32 for header clearance in preview */}
+        <div className="flex-1 p-12 md:p-24 pt-32 md:pt-32 space-y-16 relative overflow-hidden bg-white">
           
           {/* Subtle Watermark for PDF only */}
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg] overflow-hidden">
             <h1 className="text-[15rem] font-black uppercase tracking-[0.5em]">ACCELRY</h1>
           </div>
 
-          {/* Page 1: Executive Cover & Summary */}
-          <header className="space-y-12 relative z-10">
+          {/* Page 1: Executive Cover & Summary Block */}
+          <div className="print-cover-page space-y-16">
+            <header className="space-y-12 relative z-10">
             <div className="flex justify-between items-start">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-black">
@@ -142,16 +143,16 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
             </div>
           </header>
 
-          {/* Strategic Narrative - THE CORE CONTENT */}
-          <section className="space-y-8 relative z-10">
-            <div className="flex items-center gap-4">
-              <h3 className="text-sm font-black uppercase tracking-[0.3em] text-slate-400">Executive Summary</h3>
-              <div className="h-px flex-1 bg-slate-100" />
-            </div>
-            <p className="text-3xl leading-relaxed font-serif italic text-slate-900 pr-12">
-              &quot;{report.summary}&quot;
-            </p>
-          </section>
+            {/* Strategic Narrative - Wrapped in no-split for print integrity */}
+            <section className="space-y-8 relative z-10 print-no-split">
+              <div className="flex items-center gap-4">
+                <h3 className="text-sm font-black uppercase tracking-[0.3em] text-slate-400">Executive Summary</h3>
+                <div className="h-px flex-1 bg-slate-100" />
+              </div>
+              <p className="text-3xl leading-relaxed font-serif italic text-slate-900 pr-12">
+                &quot;{report.summary}&quot;
+              </p>
+            </section>
 
           {/* AI Strategist Recommendations */}
           {advice.length > 0 && (
@@ -171,11 +172,11 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
             </section>
           )}
 
-          {/* PAGE BREAK FOR PRINT */}
-          <div className="print-page-break" />
+            {/* PAGE BREAK FOR PRINT IS NOW HANDLED BY print-cover-page CONTAINER */}
+          </div>
 
-          {/* Page 2: Proof of Work Log */}
-          <section className="space-y-8 relative z-10 pt-12 print:pt-0">
+          {/* Page 2: Proof of Work Log - Wrapped in log-page for print flow */}
+          <section className="space-y-8 relative z-10 pt-12 print:pt-0 print-log-page">
             <div className="flex justify-between items-end border-b-2 border-black pb-4">
               <div className="flex items-center gap-3">
                 <Target className="w-6 h-6" />
@@ -257,7 +258,10 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
           .print-report-content {
             display: block !important;
             visibility: visible !important;
-            padding: 2cm !important; /* Professional margin */
+            padding: 1.5cm !important; 
+            width: 210mm !important; /* Fixed A4 Width */
+            margin: 0 auto !important;
+            background: white !important;
           }
 
           /* 5. Hide the Modal Actions (Download/X buttons) */
@@ -265,20 +269,34 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
             display: none !important;
           }
 
-          /* 6. Fix Page 2 Overlap - The "Absolute" killer */
-          .print-page-break {
-            display: block;
+          /* 6. Fix Page 1 & 2 Integrity */
+          .print-cover-page {
             page-break-after: always;
             break-after: page;
+            min-height: 280mm; /* Force full page height */
           }
 
-          /* 7. Ensure logs don't split mid-sentence */
+          /* 7. Fix Page 2 Overlap & Flow */
+          .print-log-page {
+            display: block !important;
+            position: static !important;
+            padding-top: 1cm !important;
+          }
+
+          /* 8. Ensure logs don't split mid-sentence */
           .print-log-item {
+            page-break-inside: avoid;
+            break-inside: avoid;
+            margin-bottom: 0.5cm !important;
+          }
+
+          /* 9. Prevent Summary from Splitting */
+          .print-no-split {
             page-break-inside: avoid;
             break-inside: avoid;
           }
 
-          /* 8. Modernist Typography Overrides for Print */
+          /* 10. Modernist Typography Overrides for Print */
           h1, h2, h3, h4, p, span {
             color: black !important;
             text-shadow: none !important;
