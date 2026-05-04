@@ -24,7 +24,6 @@ import {
   X,
   History as HistoryIcon
 } from 'lucide-react';
-import { createBrowserClient } from '@supabase/ssr';
 import { 
   getProjects, 
   createProject, 
@@ -279,20 +278,7 @@ export default function AdminPortal() {
           >
             <FileText className="w-4 h-4" /> Strategy Archive
           </button>
-          <div className="w-px h-6 bg-white/10 mx-2 self-center" />
-          <button 
-            onClick={async () => { 
-              const supabase = createBrowserClient(
-                process.env.NEXT_PUBLIC_SUPABASE_URL!,
-                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-              );
-              await supabase.auth.signOut();
-              window.location.href = '/login';
-            }}
-            className="px-6 py-2 rounded-lg text-sm font-bold text-muted hover:bg-red-500/10 hover:text-red-500 transition-all"
-          >
-            Logout
-          </button>
+
         </div>
       </div>
 

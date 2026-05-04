@@ -22,8 +22,7 @@ import {
 import Link from 'next/link';
 import { LatestReportSection } from '@/components/LatestReportSection';
 import { supabaseAdmin } from '@/lib/supabase-admin';
-import { createClient } from '@/lib/supabase-server';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { getProjectAlerts } from '@/app/admin/actions';
 
 export const revalidate = 0;
@@ -46,17 +45,6 @@ export default async function ProjectDashboardPage({
     notFound();
   }
 
-  // Multi-Tenancy Security Lock
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-
-  const adminEmails = (process.env.ADMIN_EMAILS || 'admin@accely.com').split(',');
-  const isClient = session?.user?.email === project.client_email;
-  const isAdmin = adminEmails.includes(session?.user?.email || '');
-
-  if (!isClient && !isAdmin) {
-    redirect('/login');
-  }
 
   // 2. Fetch commits
   const { data: commitsData } = await supabaseAdmin
