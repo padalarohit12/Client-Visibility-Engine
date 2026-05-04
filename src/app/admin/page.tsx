@@ -21,8 +21,10 @@ import {
   Copy,
   Check,
   RefreshCw,
-  X
+  X,
+  History as HistoryIcon
 } from 'lucide-react';
+import { createBrowserClient } from '@supabase/ssr';
 import { 
   getProjects, 
   createProject, 
@@ -34,7 +36,8 @@ import {
   updateProjectSaaSData,
   publishReport,
   sendPulse,
-  deletePulse
+  deletePulse,
+  getPulses
 } from './actions';
 import { ReportPreview } from '@/components/ReportPreview';
 import { format } from 'date-fns';
@@ -68,13 +71,13 @@ export default function AdminPortal() {
         getProjects().catch(e => { console.error('Projects Error:', e); return []; }),
         getAllCommits().catch(e => { console.error('Commits Error:', e); return []; }),
         getReports().catch(e => { console.error('Reports Error:', e); return []; }),
-        supabaseAdmin.from('Pulses').select('*, Projects(name)').order('created_at', { ascending: false })
+        getPulses().catch(e => { console.error('Pulses Error:', e); return []; })
       ]);
       
       setProjects(p || []);
       setCommits(c || []);
       setReports(r || []);
-      setPulses(pulseData.data || []);
+      setPulses(pulseData || []);
     } catch (error) {
       console.error('Failed to load admin data:', error);
     } finally {
@@ -278,7 +281,14 @@ export default function AdminPortal() {
           </button>
           <div className="w-px h-6 bg-white/10 mx-2 self-center" />
           <button 
-            onClick={() => { localStorage.removeItem('admin_auth'); setIsAuthorized(false); }}
+            onClick={async () => { 
+              const supabase = createBrowserClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+              );
+              await supabase.auth.signOut();
+              window.location.href = '/login';
+            }}
             className="px-6 py-2 rounded-lg text-sm font-bold text-muted hover:bg-red-500/10 hover:text-red-500 transition-all"
           >
             Logout
@@ -610,7 +620,7 @@ export default function AdminPortal() {
         {activeTab === 'feed' && (
           <section className="space-y-6 pt-12 border-t border-white/10">
             <h2 className="text-2xl font-bold flex items-center gap-3">
-              <History className="w-6 h-6 text-accent" />
+              <HistoryIcon className="w-6 h-6 text-accent" />
               Executive Communication Logs
             </h2>
             {pulses.length === 0 ? (

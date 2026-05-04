@@ -26,39 +26,29 @@ export async function POST(req: Request) {
     }
 
     const projectId = project.id;
-    const processedCommits = [];
+    
+    // Process commits in parallel to avoid Vercel timeout limits
+    const commitPromises = payload.commits
+      .filter((commit: any) => commit.message && !commit.message.startsWith('Merge pull request'))
+      .map(async (commit: any) => {
+        const translatedMessage = await translateCommitMessage(commit.message);
+        
+        const commitData = {
+          project_id: projectId,
+          hash: commit.id,
+          original_message: commit.message,
+          translated_message: translatedMessage,
+          author: commit.author?.name || 'Unknown',
+          created_at: commit.timestamp || new Date().toISOString(),
+        };
 
-    for (const commit of payload.commits) {
-      // Skip merge commits or empty messages if needed
-      if (!commit.message || commit.message.startsWith('Merge pull request')) {
-        continue;
-      }
+        const { error } = await supabaseAdmin.from('Commits').insert([commitData]);
+        if (error) console.error('Failed to insert commit:', error);
+        
+        return commitData;
+      });
 
-      // 1. Translate the commit message using AI
-      const translatedMessage = await translateCommitMessage(commit.message);
-
-      // 2. Prepare data for database
-      const commitData = {
-        project_id: projectId,
-        hash: commit.id,
-        original_message: commit.message,
-        translated_message: translatedMessage,
-        author: commit.author?.name || 'Unknown',
-        created_at: commit.timestamp || new Date().toISOString(),
-      };
-
-      // 3. Insert into Supabase
-      const { error } = await supabaseAdmin
-        .from('Commits')
-        .insert([commitData]);
-          
-        if (error) {
-          console.error('Failed to insert commit:', error);
-        }
-
-
-      processedCommits.push(commitData);
-    }
+    const processedCommits = await Promise.all(commitPromises);
 
     return NextResponse.json({ 
       message: 'Commits processed successfully', 

@@ -47,7 +47,7 @@ export default async function ProjectDashboardPage({
   }
 
   // Multi-Tenancy Security Lock
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
 
   const adminEmails = (process.env.ADMIN_EMAILS || 'admin@accely.com').split(',');

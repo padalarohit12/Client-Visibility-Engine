@@ -433,3 +433,13 @@ export async function deletePulse(pulseId: string) {
   }
   return { success: true };
 }
+
+export async function getPulses() {
+  const { data, error } = await supabaseAdmin
+    .from('Pulses')
+    .select('*, Projects(name)')
+    .order('created_at', { ascending: false });
+    
+  if (error) throw error;
+  return data;
+}

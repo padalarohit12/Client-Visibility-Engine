@@ -145,7 +145,7 @@ export async function generateAIStrategistAdvice(
     if (!response.ok) return [];
     const result = await response.json();
     const text = result[0]?.generated_text || '';
-    return text.split('\n').filter(l => l.trim().startsWith('-')).map(l => l.replace(/^- /, '').trim());
+    return text.split('\n').filter((l: string) => l.trim().startsWith('-')).map((l: string) => l.replace(/^- /, '').trim());
 
   } catch (error) {
     return [
