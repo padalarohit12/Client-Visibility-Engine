@@ -59,7 +59,7 @@ export default async function ProjectDashboardPage({
   // 3. Fetch latest reports AND total count
   const { data: reportsData } = await supabaseAdmin
     .from('Reports')
-    .select('*')
+    .select('*, Projects(*)')
     .eq('project_id', project.id)
     .eq('is_published', true)
     .order('created_at', { ascending: false })

@@ -62,11 +62,11 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
   const commitDetails = report.metrics?.commit_details || [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-8 bg-black/90 backdrop-blur-sm overflow-y-auto no-scrollbar print-root-container">
-      <div className="bg-white text-black w-full max-w-4xl rounded-none md:rounded-2xl shadow-2xl relative flex flex-col my-0 md:my-8 min-h-screen md:min-h-0 print:shadow-none print:m-0 print:w-full print:max-w-none print-report-content">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-8 bg-black/90 backdrop-blur-sm no-scrollbar print-root-container">
+      <div className="bg-white text-black w-full max-w-4xl rounded-none md:rounded-2xl shadow-2xl relative flex flex-col h-full max-h-[90vh] md:max-h-[85vh] print:shadow-none print:m-0 print:w-full print:max-w-none print:h-auto print-report-content">
         
-        {/* Header / Actions - FIXED POSITION OUTSIDE SCROLL */}
-        <div className="flex justify-between items-center p-4 md:p-6 border-b border-slate-100 bg-white/95 backdrop-blur-md z-[60] rounded-t-2xl no-print shrink-0">
+        {/* Header / Actions - ABSOLUTE POSITION FOR PREVIEW VISIBILITY */}
+        <div className="absolute top-0 left-0 right-0 h-20 flex justify-between items-center p-4 md:p-6 border-b border-slate-100 bg-white/95 backdrop-blur-md z-[100] rounded-t-2xl no-print shrink-0">
           <div className="flex items-center gap-3">
             <h2 className="text-sm md:text-xl font-bold tracking-tight text-slate-900">Executive Strategy</h2>
             <span className="hidden md:block px-3 py-1 bg-slate-100 border border-slate-200 text-slate-600 rounded-full text-[10px] font-bold uppercase tracking-widest">
@@ -104,7 +104,7 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
         </div>
 
         {/* PRINTABLE REPORT CONTENT - INDEPENDENT SCROLL */}
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-24 space-y-16 relative bg-white no-scrollbar scroll-smooth">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-24 pt-24 md:pt-28 space-y-16 relative bg-white no-scrollbar scroll-smooth">
           
           {/* Subtle Watermark for PDF only */}
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg] overflow-hidden">
@@ -263,12 +263,18 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
 
           /* 4. Selectively show report children */
           .print-report-content {
-            display: block !important;
+            display: flex !important;
+            flex-direction: column !important;
             visibility: visible !important;
-            padding: 1.5cm !important; 
-            width: 210mm !important; /* Fixed A4 Width */
-            margin: 0 auto !important;
             background: white !important;
+          }
+          @media print {
+            .print-report-content {
+              display: block !important;
+              padding: 1.5cm !important; 
+              width: 210mm !important; /* Fixed A4 Width */
+              margin: 0 auto !important;
+            }
           }
 
           /* 5. Hide the Modal Actions (Download/X buttons) */
@@ -280,7 +286,11 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
           .print-cover-page {
             page-break-after: always;
             break-after: page;
-            min-height: 280mm; /* Force full page height */
+          }
+          @media print {
+            .print-cover-page {
+              min-height: 280mm; /* Force full page height only in print */
+            }
           }
 
           /* 7. Fix Page 2 Overlap & Flow */
