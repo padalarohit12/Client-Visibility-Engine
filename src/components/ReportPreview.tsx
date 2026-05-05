@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { 
   X, 
   Download, 
@@ -30,6 +30,13 @@ interface ReportPreviewProps {
 export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
   const [isSending, setIsSending] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [report]);
 
   const handleSend = async (channel: string) => {
     setIsSending(channel);
@@ -97,7 +104,7 @@ export const ReportPreview = ({ report, onClose }: ReportPreviewProps) => {
         </div>
 
         {/* PRINTABLE REPORT CONTENT - INDEPENDENT SCROLL */}
-        <div className="flex-1 overflow-y-auto p-6 md:p-24 space-y-16 relative bg-white no-scrollbar scroll-smooth">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-24 space-y-16 relative bg-white no-scrollbar scroll-smooth">
           
           {/* Subtle Watermark for PDF only */}
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none rotate-[-45deg] overflow-hidden">
